@@ -1,3 +1,11 @@
+/* Grupo 1 Laboral , Sistema de Aluguel e Venda de Imoveis 
+  Discentes
+  Alexandre Sumbane
+  Alfredo Langa
+  Pinto Armando
+  Noel Martins
+  Dionisio Laronha
+*/
 package com.housesale;
 
 import java.util.Scanner;
