@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Casa {
     private static int codigo = 1000;
-    private int id;
     private double preco;
     private String tipo_casa;
     private String localizacao;
@@ -13,15 +12,15 @@ public class Casa {
         this.tipo_casa = tipo;
         this.preco = preco;
         this.localizacao = localizacao;
-        this.id = ++codigo;
+        this.codigo++;
     }
 
     public String getTipo_casa() {
         return tipo_casa;
     }
 
-    public int getId() {
-        return id;
+    public int getCodigo() {
+        return codigo;
     }
 
     public double getPreco() {
@@ -33,7 +32,7 @@ public class Casa {
     }
 
     public void listar() {
-        System.out.println("\nCodigo da Casa: " + this.id);
+        System.out.println("\nCodigo da Casa: " + this.codigo);
         System.out.println("\nTipo da Casa: " + this.tipo_casa);
         System.out.println("\nPreco: " + this.preco);
         System.out.println("\nLocalizacao: " + this.localizacao);
@@ -49,7 +48,7 @@ public class Casa {
     }
 
     public String toString() {
-        return "\nCodigo da Casa: " + this.id +
+        return "\nCodigo da Casa: " + this.codigo +
                 "\nTipo da Casa: " + this.getTipo_casa() +
                 "\nPreco: " + this.getPreco() +
                 "\nLocalizacao: " + this.getLocalizacao();

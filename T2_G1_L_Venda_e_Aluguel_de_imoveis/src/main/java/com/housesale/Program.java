@@ -52,7 +52,7 @@ public class Program {
 
         if (listaDeCasas.size() > 0) {
             for (Casa casa : listaDeCasas) {
-                if (casa.getId() == codigo) {
+                if (casa.getCodigo() == codigo) {
                     for (User usuario : listaDeUsers) {
                         casa_usuario.add("\nid do usuario:" + usuario.getId() + "\nId da Casa: " + casa.getId());
                     }
