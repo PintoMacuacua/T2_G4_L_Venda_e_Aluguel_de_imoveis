@@ -9,105 +9,96 @@
 */
 package com.housesale;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
-
-    public static Scanner input = new Scanner(System.in);
+    // Simulamos uma lista de propriedades e utilizadores no sistema
+    private static ArrayList<Propriedade> propriedades = new ArrayList<>();
+    private static ArrayList<Arrendatario> arrendatarios = new ArrayList<>();
+    private static ArrayList<Reserva> reservas = new ArrayList<>();
 
     public static void main(String[] args) {
+        // Inicializar dados
+        inicializarDados();
 
-        Program relacionamento = new Program();
+        // Simular arrendamento
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("=== Sistema de Arrendamento de Imóveis ===");
 
-        int opc;
+        System.out.println("Escolha um Arrendatário pelo ID:");
+        for (Arrendatario arr : arrendatarios) {
+            System.out.println("ID: " + arr.getId() + " | Nome: " + arr.getNome());
+        }
+        int idArrendatario = scanner.nextInt();
+        Arrendatario arrendatario = encontrarArrendatarioPorId(idArrendatario);
 
-        do {
-            System.out.println("\n#############################################");
-            System.out.println("\n- - - - Venda e arrendamento de casas - - - -");
-            System.out.println("\n1 - Arrendar");
-            System.out.println("\n2 - Cadastrar Casa");
-            System.out.println("\n0 - Sair");
-            opc = input.nextInt();
-            input.nextLine();
+        if (arrendatario == null) {
+            System.out.println("Arrendatário não encontrado.");
+            return;
+        }
 
-            switch (opc) {
-                case 1:
-                    System.out.println("\n1 - Ver casas");
-                    System.out.println("\n2 - Cadastrar-se");
-                    System.out.println("\n0 - Voltar");
-                    int esc = input.nextInt();
-                    input.nextLine();
+        System.out.println("Escolha uma Propriedade pelo ID:");
+        for (Propriedade prop : propriedades) {
+            System.out.println("ID: " + prop.getId() + " | Preço: " + prop.getPreco_por_dia());
+        }
+        int idPropriedade = scanner.nextInt();
+        Propriedade propriedade = encontrarPropriedadePorCodigo(idPropriedade);
 
-                    switch (esc) {
-                        case 1:
-                            relacionamento.listarCasas();
+        if (propriedade == null) {
+            System.out.println("Propriedade não encontrada.");
+            return;
+        }
 
-                            System.out.println("\n1 - Codigo da Casa a arrendar: ");
-                            int cod = input.nextInt();
+        System.out.println("Digite o valor total do pagamento:");
+        double valorPagamento = scanner.nextDouble();
 
-                            relacionamento.arrendarCasar(cod);
-                            break;
-                        case 2:
-                            System.out.println("\nIntroduz o seu nome: ");
-                            String nome = input.nextLine();
-                            System.out.println("\nIntroduz o seu Email: ");
-                            String email = input.next();
-                            System.out.println("\nIntroduz o seu Telefone: ");
-                            int telefone = input.nextInt();
-                            System.out.println("\nIntroduz a sua morada: ");
-                            String morada = input.nextLine();
+        if(valorPagamento < propriedade.getPreco_por_dia()) {
+            System.out.println("Valor Insuficiente, deve pagar:"+ propriedade.getPreco_por_dia());
 
-                            User usuario = new User(nome, email, telefone, morada);
+            return;
+        }
 
-                            relacionamento.cadastrarUsuario(usuario);
+        // Criar uma reserva
+        Reserva reserva = new Reserva(arrendatario, propriedade, new Date(), new Date(), valorPagamento);
+        reservas.add(reserva);
 
-                            break;
-                        case 0:
-                            break;
-                        default:
-                            System.out.println("Opcao Invalida!");
-                            break;
-                    }
-                    break;
+        // Processar pagamento
+        Pagamento pagamento = new Pagamento(reserva, valorPagamento, "Cartão de Crédito");
+        System.out.println("Pagamento processado com sucesso! Detalhes:");
+        System.out.println("Valor: " + pagamento.getValor() + " | Método: " + pagamento.getMetodoPagamento());
 
-                case 2:
-                    String res = "";
-                    int i = 0;
+        // Confirmar arrendamento
+        System.out.println("Reserva confirmada para a propriedade " + propriedade.getDescricao() + ".");
+    }
 
-                    System.out.println("Cadastre Casas e Clique - N - para terminar");
-                    do {
-                        System.out.println("\nInformacoes da " + (i + 1) + "ª Casa");
-                        System.out.println("\nTipo da Casa: ");
-                        String tipo_casa = input.nextLine();
-                        System.out.println("\nPreco: ");
-                        double preco = input.nextDouble();
-                        input.nextLine();
-                        System.out.println("\nLocalizacao: ");
-                        String localizacao = input.nextLine();
+    private static void inicializarDados() {
+        // Criar proprietários
+        Proprietario proprietario1 = new Proprietario("João Silva", "joao@gmail.com", "864922", "1234");
+        Proprietario proprietario2 = new Proprietario("Maria Santos","maria@gmail.com", "847777", "5678");
 
-                        Casa casa = new Casa(preco, tipo_casa, localizacao);
-                        relacionamento.cadastrarCasas(casa);
+        // Criar propriedadesn
+        propriedades.add(new Propriedade("Disponivel", 4 , 2000, proprietario1, "Dois banheros e piscina"));
+        propriedades.add(new Propriedade("Disponivel", 3, 1200, proprietario2, "jardim e salao de eventos"));
 
-                        relacionamento.listarUsuarios();
+        // Criar arrendatários
+        arrendatarios.add(new Arrendatario("Carlos Oliveira", "carlos@gmail.com", "83111","senha123"));
+        arrendatarios.add(new Arrendatario("Ana Pereira", "ana@gmail.com", "86777", "senha456"));
+    }
 
-                        System.out.println("\nQuer Continuar? Y/N");
-                        res = input.next();
+    private static Propriedade encontrarPropriedadePorCodigo(int id) {
+        for (Propriedade p : propriedades) {
+            if (p.getId() == id) return p;
+        }
+        return null;
+    }
 
-                        input.nextLine();
-
-                        i++;
-                    } while (!res.equalsIgnoreCase("n"));
-                    break;
-
-                case 0:
-                    System.out.println("Saindo...");
-                    System.exit(0);
-                    break;
-
-                default:
-                    System.out.println("Opcao Invalida!");
-                    break;
-            }
-        } while (opc != 0);
+    private static Arrendatario encontrarArrendatarioPorId(int id) {
+        for (Arrendatario a : arrendatarios) {
+            if (a.getId() == id) return a;
+        }
+        return null;
     }
 }
+
